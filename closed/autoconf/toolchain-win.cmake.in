@@ -44,6 +44,8 @@ set(Java_JAVAC_EXECUTABLE "${tool_dir}/javac" CACHE FILEPATH "")
 set(CMAKE_Java_AR "${tool_dir}/jar" CACHE FILEPATH "")
 set(CMAKE_Java_RUNTIME "${tool_dir}/java" CACHE FILEPATH "")
 set(CMAKE_Java_COMPILER "${tool_dir}/javac" CACHE FILEPATH "")
+
+set(CMAKE_J9VM_C_ALT_COMPILER "${tool_dir}/clang" CACHE FILEPATH "")
  
 separate_arguments(FIXPATH UNIX_COMMAND "@FIXPATH@")
 set(OMR_EXE_LAUNCHER "${FIXPATH}" CACHE STRING "")
