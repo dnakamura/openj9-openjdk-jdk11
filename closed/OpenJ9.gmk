@@ -235,11 +235,11 @@ stage-j9 : $(OUTPUTDIR)/vm/buildspecs/$1
 $(OUTPUTDIR)/vm/buildspecs/$1 : $(OPENJ9_TOPDIR)/buildspecs/$1
 	@$(MKDIR) -p $$(@D)
   ifeq (.feature,$(suffix $1))
-	@$(SED) $(FEATURE_SED_SCRIPT) < $$< > $$@
+	$(SED) $(FEATURE_SED_SCRIPT) < $$< > $$@
   else ifeq (.spec,$(suffix $1))
-	@$(SED) $(SPEC_SED_SCRIPT) < $$< > $$@
+	$(SED) $(SPEC_SED_SCRIPT) < $$< > $$@
   else
-	@$(CP) $$< $$@
+	$(CP) $$< $$@
   endif
 endef
 
@@ -250,6 +250,13 @@ $(foreach file, \
 J9TOOLS_DIR := $(SUPPORT_OUTPUTDIR)/j9tools
 JPP_JAR     := $(J9TOOLS_DIR)/jpp.jar
 
+ifneq (true,$(OPENJ9_ENABLE_CMAKE))
+build-openj9-tools : $(OUTPUTDIR)/vm/cmake.stamp
+	@$(ECHO) Building OpenJ9 Java Preprocessor
+	$(MAKE) -C $(OUTPUTDIR)/vm/sourcetools  $(MAKEFLAGS)  
+	@$(MKDIR) -p $(J9TOOLS_DIR)
+	cp -f $(OUTPUTDIR)/vm/sourcetools/*.jar  $(J9TOOLS_DIR)
+else
 build-openj9-tools :
 	@$(ECHO) Building OpenJ9 Java Preprocessor
 	@$(MKDIR) -p $(J9TOOLS_DIR)
@@ -258,6 +265,7 @@ build-openj9-tools :
 		DEST_DIR=$(call FixPath,$(J9TOOLS_DIR)) \
 		JAVA_HOME=$(BOOT_JDK) \
 		$(call FixPath,$(JPP_JAR))
+endif
 
 stage-j9 :
 	@$(ECHO) Staging OpenJ9 runtime in $(OUTPUTDIR)/vm
