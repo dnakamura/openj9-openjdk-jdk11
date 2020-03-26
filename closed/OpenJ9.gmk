@@ -250,7 +250,7 @@ $(foreach file, \
 J9TOOLS_DIR := $(SUPPORT_OUTPUTDIR)/j9tools
 JPP_JAR     := $(J9TOOLS_DIR)/jpp.jar
 
-ifneq (true,$(OPENJ9_ENABLE_CMAKE))
+ifeq (true,$(OPENJ9_ENABLE_CMAKE))
 build-openj9-tools : $(OUTPUTDIR)/vm/cmake.stamp
 	@$(ECHO) Building OpenJ9 Java Preprocessor
 	$(MAKE) -C $(OUTPUTDIR)/vm/sourcetools  $(MAKEFLAGS)  
@@ -469,6 +469,7 @@ recur_wildcard = $(foreach dir,$(wildcard $1/*),$(call recur_wildcard,$(dir),$2)
 AllJclSource   = $(call recur_wildcard,$(OPENJ9_TOPDIR)/jcl/src,*.java)
 
 JPP_DEST := $(SUPPORT_OUTPUTDIR)/j9jcl_sources
+
 
 $(J9JCL_SOURCES_DONEFILE) : $(AllJclSource)
 	@$(ECHO) Generating J9JCL sources
